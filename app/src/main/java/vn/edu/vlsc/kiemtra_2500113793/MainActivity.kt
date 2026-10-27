@@ -1,20 +1,48 @@
 package vn.edu.vlsc.kiemtra_2500113793
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+
+        // Ánh xạ thành phần giao diện bằng findViewById
+        val etEmail = findViewById<EditText>(R.id.etEmail)
+        val etPassword = findViewById<EditText>(R.id.etPassword)
+        val btnLogin = findViewById<Button>(R.id.btnLogin)
+        val tvStatus = findViewById<TextView>(R.id.tvStatus)
+
+        btnLogin.setOnClickListener {
+            val email = etEmail.text.toString().trim()
+            val password = etPassword.text.toString().trim()
+
+            // Kiểm tra bỏ trống
+            if (email.isEmpty()) {
+                tvStatus.setTextColor(resources.getColor(android.R.color.holo_red_dark))
+                tvStatus.text = "Lỗi: Email không được để trống!"
+                return@setOnClickListener
+            }
+            if (password.isEmpty()) {
+                tvStatus.setTextColor(resources.getColor(android.R.color.holo_red_dark))
+                tvStatus.text = "Lỗi: Mật khẩu không được để trống!"
+                return@setOnClickListener
+            }
+
+            // Kiểm tra mật khẩu >= 6 ký tự
+            if (password.length < 6) {
+                tvStatus.setTextColor(resources.getColor(android.R.color.holo_red_dark))
+                tvStatus.text = "Lỗi: Mật khẩu phải có từ 6 ký tự trở lên!"
+                return@setOnClickListener
+            }
+
+            // Dữ liệu hợp lệ
+            tvStatus.setTextColor(resources.getColor(android.R.color.holo_green_dark))
+            tvStatus.text = "Đăng nhập hợp lệ"
         }
     }
 }
